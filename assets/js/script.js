@@ -21,7 +21,7 @@
     var currentQuestionIndex = 0;
     var timer;
     var score=0;
-
+    
 // Array of question for quiz
 
 var questions= [
@@ -105,7 +105,7 @@ function checkAnswer(userAnswer, correctAnswer) {
         feedbackElement.textContent = "Correct!";
     } else {
         // Subtract time for an incorrect answer
-        timer -= 10;
+        timeLeft -= 10;
         feedbackElement.textContent = "Wrong!";
     }
 
@@ -150,5 +150,4 @@ function checkAnswer(userAnswer, correctAnswer) {
         window.location.href = "highscores.html";
     }
 
-    // Restart the quiz
-    startQuiz();
+
