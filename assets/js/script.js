@@ -60,8 +60,6 @@ var questions= [
     startTimer();
 }
 
-   
-
 // Function to load a question and its choices
 function loadQuestions() {
     var currentQuestion = questions[currentQuestionIndex];
@@ -80,6 +78,24 @@ function loadQuestions() {
     });
 };
 
+// Function to start the timer
+function startTimer() {
+    // Set the initial time for the quiz
+        var timeLeft = 60;
+
+    // Update the timer every second
+    timer = setInterval(function() {
+        timeLeft--;
+
+        if (timeLeft <= 0) {
+            // End the quiz if time runs out
+            endQuiz();
+        }
+
+        // Update the timer display
+        timerElement.textContent = timeLeft;
+    }, 1000);
+};
 
 // Function to check the answer
 function checkAnswer(userAnswer, correctAnswer) {
@@ -89,7 +105,7 @@ function checkAnswer(userAnswer, correctAnswer) {
         feedbackElement.textContent = "Correct!";
     } else {
         // Subtract time for an incorrect answer
-        timeLeft -= 10;
+        timer -= 10;
         feedbackElement.textContent = "Wrong!";
     }
 
@@ -104,26 +120,6 @@ function checkAnswer(userAnswer, correctAnswer) {
         endQuiz();
     }
 }
-
-    
-    // Function to start the timer
-    function startTimer() {
-        // Set the initial time for the quiz
-            var timeLeft = 60;
-
-        // Update the timer every second
-        timer = setInterval(function() {
-            timeLeft--;
-
-            if (timeLeft <= 0) {
-                // End the quiz if time runs out
-                endQuiz();
-            }
-
-            // Update the timer display
-            timerElement.textContent = timeLeft;
-        }, 1000);
-    };
 
       // Function to end the quiz
       function endQuiz() {
@@ -153,3 +149,6 @@ function checkAnswer(userAnswer, correctAnswer) {
     function viewHighscores() {
         window.location.href = "highscores.html";
     }
+
+    // Restart the quiz
+    startQuiz();
