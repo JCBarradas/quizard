@@ -57,7 +57,7 @@ var questions= [
    function loadQuestions() {
     var currentQuestion = questions[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
-    choicesElement.textContent = "";
+    choicesElement.innerHTML = "";
 
     // Create buttons for each option
     currentQuestion.choices.forEach(function(choice) {
@@ -69,4 +69,47 @@ var questions= [
         });
         choicesElement.appendChild(button);
     });
-}
+};
+
+ // Function to check the answer
+    function checkAnswer(userAnswer, correctAnswer) {
+        if (userAnswer === correctAnswer) {
+            // Increase the score for a correct answer
+            score += 10;
+            feedbackElement.textContent = "Correct!";
+        } else {
+            // Subtract time for an incorrect answer
+            timer -= 10;
+            feedbackElement.textContent = "Wrong!";
+        }
+
+            // Move to next question
+            currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+            // Load the next question
+                loadQuestions();
+        } else {
+            // End the quiz if all questions have been answered
+                endQuiz();
+        }
+    };
+    
+    // Function to start the timer
+    function startTimer() {
+        // Set the initial time for the quiz
+            var timeLeft = 60;
+
+        // Update the timer every second
+        timer = setInterval(function() {
+            timeLeft--;
+
+            if (timeLeft <= 0) {
+                // End the quiz if time runs out
+                endQuiz();
+            }
+
+            // Update the timer display
+            timerElement.textContent = timeLeft;
+        }, 1000);
+    };
