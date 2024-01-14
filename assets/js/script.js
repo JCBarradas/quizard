@@ -5,6 +5,7 @@
 //The quiz should end when all questions are answered or the timer reaches 0.
 
 //Dom elements
+    var startPage = document.querySelector("#start-screen")
     var startButton = document.querySelector("#start");
     var quizContainer = document.querySelector("#questions");
     var endScreen = document.querySelector("#end-screen");
@@ -47,53 +48,63 @@ var questions= [
 
  // Function to start the quiz
  function startQuiz() {
+  
+ // Hide the starter page
+   startPage.style.display = "none";
+    
+  // Show the quiz 
+    quizContainer.classList.remove("hide");
     loadQuestions();
 
     // Start the timer
-    //startTimer();
+    startTimer();
 }
 
-   // Function to load a question and its choices
-   function loadQuestions() {
+   
+
+// Function to load a question and its choices
+function loadQuestions() {
     var currentQuestion = questions[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
     choicesElement.innerHTML = "";
 
     // Create buttons for each option
-    currentQuestion.choices.forEach(function(choice) {
+    currentQuestion.options.forEach(function(choice) {
         var button = document.createElement("button");
         button.textContent = choice;
         button.addEventListener("click", function() {
-            // Check the user's answer
+            // Pass the choice as an argument
             checkAnswer(choice, currentQuestion.correctAnswer);
         });
         choicesElement.appendChild(button);
     });
 };
 
- // Function to check the answer
-    function checkAnswer(userAnswer, correctAnswer) {
-        if (userAnswer === correctAnswer) {
-            // Increase the score for a correct answer
-            score += 10;
-            feedbackElement.textContent = "Correct!";
-        } else {
-            // Subtract time for an incorrect answer
-            timer -= 10;
-            feedbackElement.textContent = "Wrong!";
-        }
 
-            // Move to next question
-            currentQuestionIndex++;
+// Function to check the answer
+function checkAnswer(userAnswer, correctAnswer) {
+    if (userAnswer === correctAnswer) {
+        // Increase the score for a correct answer
+        score += 10;
+        feedbackElement.textContent = "Correct!";
+    } else {
+        // Subtract time for an incorrect answer
+        timeLeft -= 10;
+        feedbackElement.textContent = "Wrong!";
+    }
 
-        if (currentQuestionIndex < questions.length) {
-            // Load the next question
-                loadQuestions();
-        } else {
-            // End the quiz if all questions have been answered
-                endQuiz();
-        }
-    };
+    // Move to the next question
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        // Load the next question
+        loadQuestions();
+    } else {
+        // End the quiz if all questions have been answered
+        endQuiz();
+    }
+}
+
     
     // Function to start the timer
     function startTimer() {
@@ -113,3 +124,32 @@ var questions= [
             timerElement.textContent = timeLeft;
         }, 1000);
     };
+
+      // Function to end the quiz
+      function endQuiz() {
+        // Stop the timer
+        clearInterval(timer);
+
+        // Hide the quiz container
+        quizContainer.classList.add("hide");
+
+        // Show the end screen
+        endScreen.classList.remove("hide");
+
+        // Display the final score
+        finalScoreElement.textContent = score;
+        feedbackElement.textContent = "";
+
+        // Save the score to localStorage
+    var initials = userInitialsInput.value.trim();
+        if (initials !== "") {
+            var highscores = JSON.parse(localStorage.getItem("highscores")) || [];
+            highscores.push({ initials: initials, score: score });
+            localStorage.setItem("highscores", JSON.stringify(highscores));
+        }
+    }
+
+    // Function to navigate to the highscores page
+    function viewHighscores() {
+        window.location.href = "highscores.html";
+    }
