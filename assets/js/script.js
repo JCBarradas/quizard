@@ -17,7 +17,7 @@
     var timerElement = document.querySelector("#time");
     
 // variables
-    var currentQuestion = 0;
+    var currentQuestionIndex = 0;
     var timer;
     var score=0;
 
@@ -40,3 +40,33 @@ var questions= [
         correctAnswer: "Facebook",
     }
 ]
+
+
+ startButton.addEventListener("click", startQuiz);
+ submitButton.addEventListener("click", endQuiz);
+
+ // Function to start the quiz
+ function startQuiz() {
+    loadQuestions();
+
+    // Start the timer
+    //startTimer();
+}
+
+   // Function to load a question and its choices
+   function loadQuestions() {
+    var currentQuestion = questions[currentQuestionIndex];
+    questionElement.textContent = currentQuestion.question;
+    choicesElement.textContent = "";
+
+    // Create buttons for each option
+    currentQuestion.choices.forEach(function(choice) {
+        var button = document.createElement("button");
+        button.textContent = choice;
+        button.addEventListener("click", function() {
+            // Check the user's answer
+            checkAnswer(choice, currentQuestion.correctAnswer);
+        });
+        choicesElement.appendChild(button);
+    });
+}
